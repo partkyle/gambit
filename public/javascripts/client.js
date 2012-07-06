@@ -18,9 +18,14 @@ $(function() {
 
     socket.on('update-players', function(data) {
       players = data.players;
-      var html = '<ul>';
+      var html = '<ul class="unstyled">';
       for (var player in players) {
-        html += '<li>' + players[player].name + '</li>';
+        html += '<li class="clearfix shelf">';
+        html += '<span class="pull-left">' + players[player].name + '</span>';
+        if (players[player].score) {
+          html += '<span class="pull-right">' + players[player].score + '</span>';
+        }
+        html += '</li>';
       }
       html += '</ul>';
       $players.html(html);
