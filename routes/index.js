@@ -28,6 +28,6 @@ exports.room = function(req, res) {
 
 exports.newRoom = function(req, res) {
   var room_id = uuid.v4();
-  Room.create(room_id, { id: room_id, name: room_id, players: [] });
+  Room.create(room_id, { id: room_id, name: room_id, players: {} });
   res.redirect('/room/' + room_id);
 };

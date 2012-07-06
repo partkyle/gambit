@@ -3,14 +3,13 @@ $(function() {
     var socket = io.connect('http://localhost:3000');
 
     var $nameField = $('input[name="name"]');
+    var $playerNameField = $('input[name="player"]');
     var $players = $('#players');
     var room;
     var players;
     var path = window.location.pathname.split('/');
 
-    var player_name = prompt('Name?');
-
-    socket.emit('init', { room_id: path[path.length - 1], name: player_name });
+    socket.emit('init', { room_id: path[path.length - 1] });
 
     socket.on('update-name', function(data) {
       room = data.room;
@@ -33,10 +32,16 @@ $(function() {
 
     var nameHandler = function() {
       room.name = $(this).val();
-      socket.emit('change-name', { room: room });
+      socket.emit('change-room-name', { room: room });
+    };
+
+    var playerNameHandler = function() {
+      var player = $playerNameField.val();
+      socket.emit('change-name', { name: player });
     };
 
     $('.card').on('click', clickHanlder);
     $nameField.on('change', nameHandler);
+    $playerNameField.on('change', playerNameHandler);
   }
 });

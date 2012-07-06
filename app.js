@@ -5,12 +5,12 @@
 
 var express = require('express');
 var routes = require('./routes');
-var io = require('socket.io');
 var Room = require('./lib/room');
+var uuid = require('node-uuid');
 
 var app = module.exports = express.createServer();
 
-io = io.listen(app);
+var io = require('socket.io').listen(app);
 
 // Configuration
 
@@ -41,31 +41,18 @@ app.post('/room', routes.newRoom);
 
 // Sockets
 
-var SOCKS = {};
-
 io.sockets.on('connection', function(socket) {
-
-  var room_id;
   var room;
-  
-  emitOthers = function(id, event, data) {
-    var others = SOCKS[id];
-    for (var sock in others) {
-      var other = others[sock];
-      other.emit(event, data);
-    }
-  };
+  var player;
+  var player_id = uuid.v4();
 
   socket.on('init', function(data) {
-    console.log('initializing socket');
     room = Room.find(data.room_id);
+    room.players[player_id] = { name: player_id };
+    socket.set('room', room.id);
+    socket.join(room.id);
 
-    SOCKS[room.id] = SOCKS[room.id] || [];
-    SOCKS[room.id].push(socket);
-
-    room.players.push({name: data.name});
-
-    emitOthers(room.id, 'update-players', { players: room.players });
+    io.sockets['in'](room.id).emit('update-players', { players: room.players });
 
     socket.emit('update-name', { room: room });
   });
@@ -75,9 +62,19 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('change-name', function(data) {
+    room.players[player_id].name = data.name;
+    io.sockets['in'](room.id).emit('update-players', { players: room.players });
+  });
+
+  socket.on('change-room-name', function(data) {
     console.log('changing room name for ' + data.room.id);
     room.name = data.room.name;
-    emitOthers(room.id, 'update-name', { room: room });
+    io.sockets['in'](room.id).emit('update-name', { room: room });
+  });
+
+  socket.on('disconnect', function(data) {
+    delete room.players[player_id];
+    io.sockets['in'](room.id).emit('update-players', { players: room.players });
   });
 });
 
