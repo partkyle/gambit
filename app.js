@@ -4,9 +4,12 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
+  , routes = require('./routes')
+  , io = require('socket.io');
 
 var app = module.exports = express.createServer();
+
+io = io.listen(app);
 
 // Configuration
 
@@ -31,6 +34,14 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
+
+// Sockets
+
+io.sockets.on('connection', function(socket) {
+  socket.on('click', function(data) {
+    console.log(data);
+  });
+});
 
 app.listen(3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
