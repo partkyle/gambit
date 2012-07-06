@@ -15,8 +15,11 @@ exports.index = function(req, res) {
 
 exports.room = function(req, res) {
   var room = Room.find(req.params.id);
-  if (!room) throw 'Not Found';
-  res.render('room', { title: 'Gambit' });
+  if (!room) {
+    res.redirect('/');
+  } else {
+    res.render('room', { title: 'Gambit', room: room });
+  }
 };
 
 /*
@@ -25,6 +28,6 @@ exports.room = function(req, res) {
 
 exports.newRoom = function(req, res) {
   var room_id = uuid.v4();
-  Room.create(room_id, { id: room_id, name: room_id });
+  Room.create(room_id, { id: room_id, name: room_id, players: [] });
   res.redirect('/room/' + room_id);
 };
