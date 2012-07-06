@@ -13,10 +13,11 @@ html
           .brand Express Bootstrap
 
     .container
-      .row
-        .hero-unit
-          h1 Ugh.. well..!
-          p ..start coding now!
+      h1= title
+      ul.thumbnails.cards
+        each card in [1,2,3,5,8,13] 
+          li.span2
+            a.card= card
 
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js")
     script(src="/libs/bootstrap/js/bootstrap.min.js")
