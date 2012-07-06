@@ -1,15 +1,22 @@
 @media (min-width: 980px) {
   body {
-    padding-top: 40px;
+    padding-top: 60px;
   }
+}
+
+.center {
+  text-align: center;
 }
 
 .cards {
   position: relative;
 }
 
+.header {
+  line-height: 28px;
+}
+
 .card {
-  border: 1px solid #dedede;
   box-shadow: 2px 4px 10px #444;
   color: #222;
   display: inline-block;
