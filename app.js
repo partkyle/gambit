@@ -73,7 +73,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('change-room-name', function(data) {
-    console.log('changing room name for ' + data.room.id);
+    console.log('changing room name for %s', data.room.id);
     room.name = data.room.name;
     io.sockets['in'](room.id).emit('update-name', { room: room });
   });
