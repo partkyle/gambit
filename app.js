@@ -46,24 +46,30 @@ io.sockets.on('connection', function(socket) {
   var player;
   var player_id = uuid.v4();
 
+  var updatePlayers = function() {
+    io.sockets['in'](room.id).emit('update-players', { players: room.players });
+  };
+
   socket.on('init', function(data) {
     room = Room.find(data.room_id);
     room.players[player_id] = { name: player_id };
     socket.set('room', room.id);
     socket.join(room.id);
 
-    io.sockets['in'](room.id).emit('update-players', { players: room.players });
+    updatePlayers();
 
     socket.emit('update-name', { room: room });
   });
 
-  socket.on('click', function(data) {
-    console.log(data);
+  socket.on('click-card', function(data) {
+    console.log('player [%s] clicked %s', player_id, data.score);
+    room.players[player_id].score = data.score;
+    updatePlayers();
   });
 
   socket.on('change-name', function(data) {
     room.players[player_id].name = data.name;
-    io.sockets['in'](room.id).emit('update-players', { players: room.players });
+    updatePlayers();
   });
 
   socket.on('change-room-name', function(data) {
@@ -74,7 +80,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('disconnect', function(data) {
     delete room.players[player_id];
-    io.sockets['in'](room.id).emit('update-players', { players: room.players });
+    updatePlayers();
   });
 });
 

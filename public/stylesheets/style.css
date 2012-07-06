@@ -24,7 +24,7 @@
   line-height: 60px;
 }
 
-.card:hover {
+.card:hover, .selected {
   background-color: #ff9;
   color: #222;
   cursor: pointer;
@@ -34,4 +34,5 @@
 .shelf {
   border: 1px solid #222;
   padding: 10px;
+  margin: 5px;
 }

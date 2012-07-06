@@ -32,7 +32,15 @@ $(function() {
     });
 
     var clickHanlder = function() {
-      socket.emit('click', {card: parseInt($(this).text(), 10)});
+      var self = $(this);
+      if (self.is('.selected')) {
+        socket.emit('click-card', { score: null });
+        self.removeClass('selected');
+      } else {
+        $('.selected').removeClass('selected');
+        self.addClass('selected');
+        socket.emit('click-card', { score: parseInt($(this).text(), 10) });
+      }
     };
 
     var nameHandler = function() {
