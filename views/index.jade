@@ -2,3 +2,8 @@ form(action="/room", method="post")
   button(type="submit", class="btn btn-primary")
     i.icon-plus.icon-white
     = " New room"
+
+ul.unstyled
+each room in rooms
+  li
+    a(href="/room/" + room.name)= room.id
