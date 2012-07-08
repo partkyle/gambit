@@ -14,11 +14,13 @@ var app = module.exports = express.createServer();
 
 var io = require('socket.io').listen(app);
 
-// assuming io is the Socket.IO server object
-io.configure(function () {
-  io.set("transports", ["xhr-polling"]);
-  io.set("polling duration", 10);
-});
+if (app.settings.env == 'production') {
+  // settings for heroku
+  io.configure(function () {
+    io.set("transports", ["xhr-polling"]);
+    io.set("polling duration", 10);
+  });
+}
 
 var ROOM_TIME_LIMIT = 1000 * 60 * 5; // 5 minutes
 
