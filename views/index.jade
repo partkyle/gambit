@@ -5,6 +5,6 @@ form(action="/room", method="post")
 
 #lobby
   ul.unstyled
-  each room in rooms
-    li.shelf
-      a(href="/room/" + room.id)= room.name
+    each room in rooms
+      li.shelf
+        a(href="/room/" + room.id)= room.name
