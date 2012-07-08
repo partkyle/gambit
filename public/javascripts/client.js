@@ -9,14 +9,7 @@ $(function() {
     var players;
     var path = window.location.pathname.split('/');
 
-    socket.emit('init', { room_id: path[path.length - 1] });
-
-    socket.on('update-name', function(data) {
-      room = data.room;
-      $nameField.val(room.name);
-    });
-
-    socket.on('update-players', function(data) {
+    var updatePlayersHandler = function(data) {
       players = data.players;
       var html = '<ul class="unstyled">';
       for (var player in players) {
@@ -29,7 +22,26 @@ $(function() {
       }
       html += '</ul>';
       $players.html(html);
+    };
+
+    socket.emit('init', { room_id: path[path.length - 1] });
+
+    socket.on('update-name', function(data) {
+      room = data.room;
+      $nameField.val(room.name);
     });
+
+    socket.on('show-result', function(data) {
+      $('body').addClass('results');
+    });
+
+    socket.on('reset-game', function(data) {
+      $('body').removeClass('results');
+      $('.selected').removeClass('selected');
+      updatePlayersHandler(data);
+    });
+
+    socket.on('update-players', updatePlayersHandler);
 
     var clickHanlder = function() {
       var self = $(this);
@@ -53,8 +65,15 @@ $(function() {
       socket.emit('change-name', { name: player });
     };
 
+    var resetHandler = function(e) {
+      e.preventDefault();
+      socket.emit('reset-game');
+      return false;
+    };
+
     $('.card').on('click', clickHanlder);
     $nameField.on('change', nameHandler);
     $playerNameField.on('change', playerNameHandler);
+    $('#reset').on('click', resetHandler);
   }
 });

@@ -28,6 +28,25 @@ exports.room = function(req, res) {
 
 exports.newRoom = function(req, res) {
   var room_id = uuid.v4();
-  Room.create(room_id, { id: room_id, name: room_id, players: {} });
+  Room.create(room_id, {
+    id: room_id,
+    name: room_id,
+    players: {},
+    done: function() {
+      var count = 0;
+      for (var player in this.players) {
+        if (this.players[player].score) {
+          count += 1;
+        }
+      }
+      console.log('Found %s/%s players finished.', count, this.players.size());
+      return count >= this.players.size();
+    },
+    reset: function() {
+      for (var player in this.players) {
+        this.players[player].score = null;
+      }
+    }
+  });
   res.redirect('/room/' + room_id);
 };

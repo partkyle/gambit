@@ -4,6 +4,14 @@
   }
 }
 
+.end-round {
+  display: none;
+}
+
+.results .end-round {
+  display: inline-block;
+}
+
 .center {
   text-align: center;
 }

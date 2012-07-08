@@ -85,6 +85,10 @@ io.sockets.on('connection', function(socket) {
     console.log('player [%s] clicked %s', player_id, data.score);
     room.players[player_id].score = data.score;
     updatePlayers();
+
+    if (room.done()) {
+      io.sockets.in(room.id).emit('show-result');
+    }
   });
 
   socket.on('change-name', function(data) {
@@ -96,6 +100,11 @@ io.sockets.on('connection', function(socket) {
     console.log('changing room name for %s', data.room.id);
     room.name = data.room.name;
     io.sockets.in(room.id).emit('update-name', { room: room });
+  });
+
+  socket.on('reset-game', function(data) {
+    room.reset();
+    io.sockets.in(room.id).emit('reset-game', { players: room.players });
   });
 
   socket.on('disconnect', function(data) {
