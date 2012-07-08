@@ -3,7 +3,4 @@ form(action="/room", method="post")
     i.icon-plus.icon-white
     = " New room"
 
-ul.unstyled
-each room in rooms
-  li
-    a(href="/room/" + room.id)= room.name
+#lobby

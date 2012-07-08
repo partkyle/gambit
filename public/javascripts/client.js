@@ -1,7 +1,26 @@
 $(function() {
-  if ($('.cards').length) {
-    var socket = io.connect(window.location.hostname);
+  var socket = io.connect(window.location.hostname);
 
+  if($("#lobby").length) {
+    socket.emit('lobby');
+
+    var updateRoomList = function(data) {
+      var html = '<ul class="unstyled">';
+      for (var room in data.rooms) {
+        var r = data.rooms[room];
+        html += '<li class="shelf">';
+        html += '<a href="/room/' + r.id + '">' + r.name + '</a>';
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      $('#lobby').html(html);
+    };
+
+    socket.on('update-rooms', updateRoomList);
+  }
+
+  if ($('.cards').length) {
     var $nameField = $('input[name="name"]');
     var $playerNameField = $('input[name="player"]');
     var $players = $('#players');

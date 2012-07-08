@@ -47,7 +47,10 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 
-app.get('/room/:id', routes.room);
+app.get('/room/:id', function(req, res, next) {
+  io.sockets.in('lobby').emit('update-rooms', { rooms: Room.all() });
+  next();
+}, routes.room);
 app.post('/room', routes.newRoom);
 
 var clearIfEmpty = function(room) {
@@ -69,6 +72,14 @@ io.sockets.on('connection', function(socket) {
   var updatePlayers = function() {
     io.sockets.in(room.id).emit('update-players', { players: room.players });
   };
+
+  socket.on('lobby', function(data) {
+    console.log('user connected to lobby');
+    socket.set('room', 'lobby');
+    socket.join('lobby');
+
+    socket.emit('update-rooms', { rooms: Room.all() });
+  });
 
   socket.on('init', function(data) {
     room = Room.find(data.room_id);
@@ -100,6 +111,7 @@ io.sockets.on('connection', function(socket) {
     console.log('changing room name for %s', data.room.id);
     room.name = data.room.name;
     io.sockets.in(room.id).emit('update-name', { room: room });
+    io.sockets.in('lobby').emit('update-rooms', { rooms: Room.all() });
   });
 
   socket.on('reset-game', function(data) {
@@ -108,12 +120,14 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function(data) {
-    delete room.players[player_id];
-    updatePlayers();
+    if (room) {
+      delete room.players[player_id];
+      updatePlayers();
 
-    setTimeout(function() {
-      clearIfEmpty(room);
-    }, ROOM_TIME_LIMIT);
+      setTimeout(function() {
+        clearIfEmpty(room);
+      }, ROOM_TIME_LIMIT);
+    }
   });
 });
 
