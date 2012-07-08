@@ -4,3 +4,7 @@ form(action="/room", method="post")
     = " New room"
 
 #lobby
+  ul.unstyled
+  each room in rooms
+    li
+      a(href="/room/" + room.id)= room.name
