@@ -1,6 +1,6 @@
 $(function() {
   if ($('.cards').length) {
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect(window.location.hostname);
 
     var $nameField = $('input[name="name"]');
     var $playerNameField = $('input[name="player"]');
