@@ -8,4 +8,7 @@
     , "socket.io": "*"
     , "node-uuid": "*"
   }
+  , "engines": {
+    "version": "0.8.x"
+  }
 }
