@@ -6,7 +6,7 @@ var uuid = require('node-uuid');
  */
 
 exports.index = function(req, res) {
-  res.render('index', { title: 'Gambit', rooms: Room.all() });
+  res.render('index', { title: 'Gambit' });
 };
 
 /*

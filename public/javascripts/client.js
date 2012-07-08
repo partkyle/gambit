@@ -41,6 +41,12 @@ $(function() {
       }
       html += '</ul>';
       $players.html(html);
+
+      if (data.showResult) {
+        $('body').addClass('results');
+      } else {
+        $('body').removeClass('results');
+      }
     };
 
     socket.emit('init', { room_id: path[path.length - 1] });
@@ -48,10 +54,6 @@ $(function() {
     socket.on('update-name', function(data) {
       room = data.room;
       $nameField.val(room.name);
-    });
-
-    socket.on('show-result', function(data) {
-      $('body').addClass('results');
     });
 
     socket.on('reset-game', function(data) {

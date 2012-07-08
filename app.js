@@ -70,7 +70,7 @@ io.sockets.on('connection', function(socket) {
   var player_id = uuid.v4();
 
   var updatePlayers = function() {
-    io.sockets.in(room.id).emit('update-players', { players: room.players });
+    io.sockets.in(room.id).emit('update-players', { players: room.players, showResult: room.done() });
   };
 
   socket.on('lobby', function(data) {
@@ -96,10 +96,6 @@ io.sockets.on('connection', function(socket) {
     console.log('player [%s] clicked %s', player_id, data.score);
     room.players[player_id].score = data.score;
     updatePlayers();
-
-    if (room.done()) {
-      io.sockets.in(room.id).emit('show-result');
-    }
   });
 
   socket.on('change-name', function(data) {
