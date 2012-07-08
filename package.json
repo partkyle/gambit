@@ -9,6 +9,6 @@
     , "node-uuid": "*"
   }
   , "engines": {
-    "version": "0.8.x"
+    "node": "0.8.x"
   }
 }
