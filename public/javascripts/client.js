@@ -28,6 +28,30 @@ $(function() {
     var players;
     var path = window.location.pathname.split('/');
 
+    var badgeFor = function(score) {
+      var badge = 'badge';
+
+      switch(score) {
+        case 2:
+          badge += ' badge-inverse';
+          break;
+        case 3:
+          badge += ' badge-success';
+          break;
+        case 5:
+          badge += ' badge-info';
+          break;
+        case 8:
+          badge += ' badge-warning';
+          break;
+        case 13:
+          badge += ' badge-important';
+          break;
+      }      
+
+      return badge;
+    }
+
     var updatePlayersHandler = function(data) {
       players = data.players;
       var html = '<ul class="unstyled">';
@@ -35,7 +59,7 @@ $(function() {
         html += '<li class="clearfix shelf" data-player-id="' + player + '">';
         html += '<span class="pull-left">' + players[player].name + '</span>';
         if (players[player].score) {
-          html += '<span class="pull-right end-round">' + players[player].score + '</span>';
+          html += '<span class="pull-right end-round ' + badgeFor(players[player].score) + '">' + players[player].score + '</span>';
         }
         html += '</li>';
       }
