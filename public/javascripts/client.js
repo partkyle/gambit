@@ -5,16 +5,15 @@ $(function() {
     socket.emit('lobby');
 
     var updateRoomList = function(data) {
-      var html = '<ul class="unstyled">';
-      for (var room in data.rooms) {
-        var r = data.rooms[room];
-        html += '<li class="shelf">';
-        html += '<a href="/room/' + r.id + '">' + r.name + '</a>';
-        html += '</li>';
-      }
-      html += '</ul>';
+      var source   = $("#update-room-list").html();
+      var template = Handlebars.compile(source);
+      var rooms = [];
 
-      $('#lobby').html(html);
+      for (var room_id in data.rooms) {
+        rooms.push(data.rooms[room_id]);
+      }
+
+      $('#lobby').html(template({rooms: rooms}));
     };
 
     socket.on('update-rooms', updateRoomList);
@@ -25,7 +24,6 @@ $(function() {
     var $playerNameField = $('input[name="player"]');
     var $players = $('#players');
     var room;
-    var players;
     var path = window.location.pathname.split('/');
 
     var badgeFor = function(score) {
@@ -47,24 +45,21 @@ $(function() {
         case 13:
           badge += ' badge-important';
           break;
-      }      
+      }
 
       return badge;
-    }
+    };
 
     var updatePlayersHandler = function(data) {
-      players = data.players;
-      var html = '<ul class="unstyled">';
-      for (var player in players) {
-        html += '<li class="clearfix shelf" data-player-id="' + player + '">';
-        html += '<span class="pull-left">' + players[player].name + '</span>';
-        if (players[player].score) {
-          html += '<span class="pull-right end-round ' + badgeFor(players[player].score) + '">' + players[player].score + '</span>';
-        }
-        html += '</li>';
+      console.log(data);
+      var players = [];
+      for (var player_id in data.players) {
+        players.push(data.players[player_id]);
       }
-      html += '</ul>';
-      $players.html(html);
+      var source   = $("#player-list").html();
+      var template = Handlebars.compile(source);
+
+      $players.html(template({players: players}));
 
       if (data.showResult) {
         $('body').addClass('results');
