@@ -45,13 +45,13 @@ app.get('/room/:id', function(req, res, next) {
 }, routes.room);
 app.post('/room', routes.newRoom);
 
-var clearIfEmpty = function(room) {
-  // the next user will trigger the timeout,
-  // so we can ignore this.
-  if (room.players.size() === 0) {
-    Room.delete(room.id);
-  }
-};
+// var clearIfEmpty = function(room) {
+//   // the next user will trigger the timeout,
+//   // so we can ignore this.
+//   if (room.players.size() === 0) {
+//     Room.delete(room.id);
+//   }
+// };
 
 
 // Sockets
@@ -112,9 +112,9 @@ io.sockets.on('connection', function(socket) {
       delete room.players[player_id];
       updatePlayers();
 
-      setTimeout(function() {
-        clearIfEmpty(room);
-      }, ROOM_TIME_LIMIT);
+//       setTimeout(function() {
+//         clearIfEmpty(room);
+//       }, ROOM_TIME_LIMIT);
     }
   });
 });
