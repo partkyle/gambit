@@ -1,17 +1,20 @@
-.row.header
-  .span4
-    input.span4(type="text", name="name", value=room.name)
-  .span4.center
-    a#reset(href="#")
-      i.icon-refresh
-      = " Next Round"
-  .span4.pull-right
-    input.span4(type="text", name="player", placeholder="Player Name...")
+extends layout
 
-ul.thumbnails.cards
-  each card in [1,2,3,5,8,13]
-    li.span2
-      a.card
-        span= card
+block content
+  .row.header
+    .span4
+      input.span4(type="text", name="name", value=room.name)
+    .span4.center
+      a#reset(href="#")
+        i.icon-refresh
+        = " Next Round"
+    .span4.pull-right
+      input.span4(type="text", name="player", placeholder="Player Name...")
 
-#players
+  ul.thumbnails.cards
+    each card in [1,2,3,5,8,13]
+      li.span2
+        a.card
+          span= card
+
+  #players

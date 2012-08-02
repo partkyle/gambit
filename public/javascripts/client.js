@@ -53,8 +53,13 @@ $(function() {
     var updatePlayersHandler = function(data) {
       console.log(data);
       var players = [];
+      var myBadge = function() {
+        return badgeFor(this.score);
+      };
       for (var player_id in data.players) {
-        players.push(data.players[player_id]);
+        var player = data.players[player_id];
+        player.score_badge = myBadge;
+        players.push(player);
       }
       var source   = $("#player-list").html();
       var template = Handlebars.compile(source);

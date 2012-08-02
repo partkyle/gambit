@@ -16,7 +16,7 @@ html
           a(href="/").brand Gambit
 
     .container
-      != body
+      block content
 
     script(id='update-room-list', type="text/x-handlebars-template")
       |  <ul class="unstyled">
@@ -30,7 +30,7 @@ html
       |     {{#each players}}
       |       <li class="clearfix shelf">
       |         <span class="pull-left">{{name}}</span>
-      |         <span class="pull-right end-round">{{score}}</span>
+      |         <span class="pull-right end-round {{score_badge}}">{{score}}</span>
       |       </li>
       |     {{/each}}
       |  </ul>
