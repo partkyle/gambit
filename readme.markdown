@@ -1,5 +1,4 @@
-A very simple template of an Express.js single page web application loaded with jQuery and Twitter Bootstrap
+Party Planning Poker
+====================
 
-Don't forget to get dependencies:
-
-    npm install -d
+A simple app written in the express web framework using socket.io for the frontend real-time interraction.
